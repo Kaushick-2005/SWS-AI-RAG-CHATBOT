@@ -60,7 +60,8 @@ embedding_model = HuggingFaceEmbeddings(
 vectordb = Chroma.from_documents(
     documents=chunks,
     embedding=embedding_model,
-    persist_directory="chroma_db"
+    persist_directory="chroma_db",
+    collection_name="sws_ai_docs"
 )
 
 vectordb.persist()

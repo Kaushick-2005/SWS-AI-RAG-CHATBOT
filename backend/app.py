@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
@@ -45,11 +45,11 @@ def get_vector_store():
 def get_llm():
     global llm
     if llm is None:
-        api_key = os.getenv("ANTHROPIC_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable not set")
-        llm = ChatAnthropic(
-            model="claude-3-5-sonnet-20241022",
+            raise ValueError("GROQ_API_KEY environment variable not set")
+        llm = ChatGroq(
+            model="llama-3.3-70b-versatile",
             api_key=api_key,
             temperature=0
         )
