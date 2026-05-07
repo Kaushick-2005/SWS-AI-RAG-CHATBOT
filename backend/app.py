@@ -21,20 +21,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize embeddings and vector store
-embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-vector_store = Chroma(
-    persist_directory="chroma_db",
-    embedding_function=embedding_model,
-    collection_name="sws_ai_docs"
-)
+# Global variables for lazy loading
+embedding_model = None
+vector_store = None
+llm = None
 
-# Initialize LLM
-llm = ChatAnthropic(
-    model="claude-3-5-sonnet-20241022",
-    api_key=os.getenv("ANTHROPIC_API_KEY"),
-    temperature=0
-)
+def get_embedding_model():
+    global embedding_model
+    if embedding_model is None:
+        embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return embedding_model
+
+def get_vector_store():
+    global vector_store
+    if vector_store is None:
+        vector_store = Chroma(
+            persist_directory="chroma_db",
+            embedding_function=get_embedding_model(),
+            collection_name="sws_ai_docs"
+        )
+    return vector_store
+
+def get_llm():
+    global llm
+    if llm is None:
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY environment variable not set")
+        llm = ChatAnthropic(
+            model="claude-3-5-sonnet-20241022",
+            api_key=api_key,
+            temperature=0
+        )
+    return llm
 
 class ChatRequest(BaseModel):
     question: str
@@ -51,7 +70,8 @@ def read_root():
 async def chat(request: ChatRequest):
     try:
         # Retrieve relevant chunks
-        retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+        vs = get_vector_store()
+        retriever = vs.as_retriever(search_kwargs={"k": 5})
         docs = retriever.invoke(request.question)
         
         if not docs:
@@ -78,7 +98,8 @@ User Question: {request.question}
 Answer:"""
         
         # Get response from LLM
-        response = llm.invoke(prompt)
+        llm_instance = get_llm()
+        response = llm_instance.invoke(prompt)
         answer = response.content
         
         return ChatResponse(
