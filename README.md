@@ -300,13 +300,8 @@ All company documents are confidential and proprietary to SWS AI.
 
 ## 👤 Author
 
-Kaushick-2005
+Kaushick Kumar
 
-## 🤝 Contributing
 
-Contributions welcome! Please ensure:
-- Clean commit history (commit every 15 minutes during development)
-- Descriptive commit messages
-- Updated README for significant changes
 
 
