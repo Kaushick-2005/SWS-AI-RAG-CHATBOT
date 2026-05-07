@@ -271,6 +271,23 @@ Make sure virtual environment is activated and dependencies are installed:
 pip install -r requirements.txt
 ```
 
+### TensorFlow/Keras Compatibility Error
+
+If you see: `ValueError: Your currently installed version of Keras is Keras 3...`
+
+**Solution:** Install tf-keras for backward compatibility:
+```bash
+pip install --upgrade tf-keras tensorflow
+```
+
+### First Startup Takes Long (Blank Output)
+
+**Why:** The HuggingFace embeddings model downloads (~100MB) on first use, which takes 30-60 seconds.
+
+**Solution:** This is normal. Wait for the download to complete. Subsequent API calls will be much faster.
+
+**Monitor Progress:** Check your internet connection and the `backend/` directory for a `.cache/` folder being created.
+
 ### Slow Responses
 
 - Increase `top-k` in retrieval (more context = slower)
