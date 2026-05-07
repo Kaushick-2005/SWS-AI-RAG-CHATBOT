@@ -9,3 +9,5 @@ chromadb>=0.4.0
 PyMuPDF>=1.27.0
 pdfplumber>=0.10.0
 sentence-transformers>=2.2.0
+tf-keras>=2.0.0
+tensorflow>=2.0.0
