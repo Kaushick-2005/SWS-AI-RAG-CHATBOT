@@ -292,10 +292,4 @@ Contributions welcome! Please ensure:
 - Descriptive commit messages
 - Updated README for significant changes
 
-## 📞 Support
 
-For issues or questions, create a GitHub issue in the repository.
-
----
-
-**Made with ❤️ for SWS AI**
